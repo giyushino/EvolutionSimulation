@@ -21,6 +21,7 @@ To allow imports across the project, run
 ```sh
 pip install -e .
 ```
+To replicate experiments, go to [Google QuickDraw Dataset](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap) and download the images you want to use. Otherwise, use any other dataset (you would have to manually scale the images to 28x28 and create the numpy tensor). Create a new directory in dataset called rawData and download the files there
 
 ## To Do
 - [x] Create class for animals 
