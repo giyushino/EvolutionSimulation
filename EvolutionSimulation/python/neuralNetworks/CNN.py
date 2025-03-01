@@ -27,4 +27,3 @@ class Brain(nn.Module):
         x = self.fc1(x)            
         return x
 
-print("hello")

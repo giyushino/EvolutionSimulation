@@ -1,7 +1,0 @@
-README.md
-setup.py
-EvolutionSimulation.egg-info/PKG-INFO
-EvolutionSimulation.egg-info/SOURCES.txt
-EvolutionSimulation.egg-info/dependency_links.txt
-EvolutionSimulation.egg-info/requires.txt
-EvolutionSimulation.egg-info/top_level.txt
