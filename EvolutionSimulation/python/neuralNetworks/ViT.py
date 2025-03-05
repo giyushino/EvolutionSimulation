@@ -212,7 +212,7 @@ class ImageEncoder(nn.Module):
         return x
 
 class CLIP(nn.Module):
-    def __init__(self, emb_dim, vit_width, img_size, patch_size, n_channels, vit_layers, vit_heads, vocab_size, text_width, max_seq_length, text_heads, text_layers):
+    def __init__(self, emb_dim, vit_width, img_size, patch_size, n_channels, vit_layers, vit_heads, vocab_size, text_width, max_seq_length, text_heads, text_layers, name):
         super().__init__()
 
         self.image_encoder = ImageEncoder(vit_width, img_size, patch_size, n_channels, vit_layers, vit_heads, emb_dim)
@@ -222,6 +222,7 @@ class CLIP(nn.Module):
         self.temperature = nn.Parameter(torch.ones([]) * np.log(1 / 0.07))
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.name = name
 
 
     def forward(self,image,text, mask=None):
@@ -242,7 +243,7 @@ class CLIP(nn.Module):
         return loss
 
 
-def CLIPModel(emb_dim=32, vit_width=9, img_size=(28,28), patch_size=(14,14), n_channels=1, vit_layers=3, vit_heads=3, vocab_size = 256, text_width=32, max_seq_length=32, text_heads=8, text_layers=4):
+def CLIPModel(emb_dim=32, vit_width=9, img_size=(28,28), patch_size=(14,14), n_channels=1, vit_layers=3, vit_heads=3, vocab_size = 256, text_width=32, max_seq_length=32, text_heads=8, text_layers=4, name = "test"):
     """
     Initializes a CLIP model with predefined values for the image and text encoders.
 
@@ -262,7 +263,7 @@ def CLIPModel(emb_dim=32, vit_width=9, img_size=(28,28), patch_size=(14,14), n_c
     Returns:
         CLIP: The CLIP model.
     """
-    model = CLIP(emb_dim, vit_width, img_size, patch_size, n_channels, vit_layers, vit_heads, vocab_size, text_width, max_seq_length, text_heads, text_layers)
+    model = CLIP(emb_dim, vit_width, img_size, patch_size, n_channels, vit_layers, vit_heads, vocab_size, text_width, max_seq_length, text_heads, text_layers, name)
     return model
 
 
@@ -284,5 +285,9 @@ if __name__ == "__main__":
     lr = 1e-3
     epochs = 10
     batch_size = 128
+    name = "test"
 
-    model = CLIP(emb_dim, vit_width, img_size, patch_size, n_channels, vit_layers, vit_heads, vocab_size, text_width, max_seq_length, text_heads, text_layers)
+    model = CLIP(emb_dim, vit_width, img_size, patch_size, n_channels, vit_layers, vit_heads, vocab_size, text_width, max_seq_length, text_heads, text_layers, name)
+    for name, param in model.state_dict().items():
+        print(name, param)
+
