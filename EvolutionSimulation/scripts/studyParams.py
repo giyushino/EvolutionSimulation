@@ -25,7 +25,8 @@ def studyLayers(model, specificLayers=None, seeWeights=False):
                 print(param.clone().detach())
             print("="*70)
 
-def compareParams(base, comparison, specificLayers=None, seeWeights=False, shouldPrint = True):
+# Rewrite the for loop, can do without zip
+def compareParams(base, comparison, specificLayers=None, seeWeights=False, shouldPrint = False):
     """
     Uses cosine similarity to calculate how similar two models are 
 
@@ -43,7 +44,7 @@ def compareParams(base, comparison, specificLayers=None, seeWeights=False, shoul
     print(f"Comparing {base.name} with {comparison.name}")
     difference = 0
     cos = torch.nn.CosineSimilarity(dim=0, eps=1e-6)  # Use dim=0 for flat tensors
-    
+    count = 0 
     for (name_base, param_base), (name_comp, param_comp) in zip(base.named_parameters(), comparison.named_parameters()):
         if name_base != name_comp:
             print("Mismatch in layer names, comparison might be incorrect!")
@@ -69,11 +70,13 @@ def compareParams(base, comparison, specificLayers=None, seeWeights=False, shoul
                     print(f"Base Weights:\n{param_base}")
                     print(f"Comparison Weights:\n{param_comp}")
                 print("="*70)
+            count += 1
     
     if difference == 0: 
         print(f"Models are identical")
     else:
         print(f"Final Model Similarity Score: {difference:.6f}")
+        print(F"Per Layer: {difference/count:.6f}")
     return difference
 
 
@@ -82,13 +85,13 @@ if __name__ == "__main__":
     test = Brain("test")
     base = Brain("base")
     comparison = Brain("comparison")
-    studyLayers(test, None, False)
+    #studyLayers(test, None, False)
     t0 = time.perf_counter()
     compareParams(test, test, None, seeWeights=False, shouldPrint=False)
     t1 = time.perf_counter()
     testViT = CLIPModel(name = "test")
     comparisonViT = CLIPModel(name = "compare")
-    studyLayers(testViT, None, False)
+    #studyLayers(testViT, None, False)
     t2 = time.perf_counter()
     compareParams(testViT, comparisonViT, None, seeWeights=False, shouldPrint=False)
     t3 = time.perf_counter()
