@@ -113,13 +113,18 @@ class TransformerEncoder(nn.Module):
 
 def tokenizer(text, encode=True, mask=None, max_seq_length=32):
     if encode:
-        out = chr(2) + text + chr(3) # Adding SOT and EOT tokens
-        out = out + "".join([chr(0) for _ in range(max_seq_length-len(out))]) # Adding Padding
-        out = torch.IntTensor(list(out.encode("utf-8"))) # Encoding Text
-        mask = torch.ones(len(out.nonzero()))
-        mask = torch.cat((mask,torch.zeros(max_seq_length-len(mask)))).type(torch.IntTensor)
+        out = chr(2) + text + chr(3)  # Adding SOT and EOT tokens
+        out = out + "".join([chr(0) for _ in range(max_seq_length - len(out))])  # Adding Padding
+        out = torch.IntTensor(list(out.encode("utf-8")))  # Encoding Text
+        
+        mask = torch.ones(len(out.nonzero()))  # Create mask
+        mask = torch.cat((mask, torch.zeros(max_seq_length - len(mask)))).type(torch.IntTensor)
+
+        # Ensure mask is 2D: (batch, seq_length)
+        mask = mask.unsqueeze(0)  # Convert shape from (seq_length,) to (1, seq_length)
+
     else:
-        out = [chr(x) for x in text[1:len(mask.nonzero())-1]]
+        out = [chr(x) for x in text[1 : len(mask.nonzero()) - 1]]
         out = "".join(out)
         mask = None
 
@@ -245,27 +250,53 @@ class CLIP(nn.Module):
 
 def CLIPModel(emb_dim=32, vit_width=9, img_size=(28,28), patch_size=(14,14), n_channels=1, vit_layers=3, vit_heads=3, vocab_size = 256, text_width=32, max_seq_length=32, text_heads=8, text_layers=4, name = "test"):
     """
-    Initializes a CLIP model with predefined values for the image and text encoders.
+    Initializes a CLIP model with predefined values for the image and text encoders
 
     Args:
-        emb_dim (int): Embedding dimension for both image and text encoders.
-        vit_width (int): Width of the Vision Transformer (ViT).
-        img_size (tuple): Size of the input image.
-        patch_size (tuple): Size of the image patches.
-        n_channels (int): Number of input channels (e.g., 1 for grayscale, 3 for RGB).
-        vit_layers (int): Number of layers in the Vision Transformer.
-        vit_heads (int): Number of attention heads in the Vision Transformer.
-        text_width (int): Width of the text encoder.
-        max_seq_length (int): Maximum sequence length for text input.
-        text_heads (int): Number of attention heads in the text encoder.
-        text_layers (int): Number of layers in the text encoder.
+        emb_dim (int): Embedding dimension for both image and text encoders
+        vit_width (int): Width of the Vision Transformer (ViT)
+        img_size (tuple): Size of the input image
+        patch_size (tuple): Size of the image patches
+        n_channels (int): Number of input channels (e.g., 1 for grayscale, 3 for RGB)
+        vit_layers (int): Number of layers in the Vision Transformer
+        vit_heads (int): Number of attention heads in the Vision Transformer
+        text_width (int): Width of the text encoder
+        max_seq_length (int): Maximum sequence length for text input
+        text_heads (int): Number of attention heads in the text encoder
+        text_layers (int): Number of layers in the text encoder
+        name (string): Name of the model
     
     Returns:
-        CLIP: The CLIP model.
+        CLIP: The CLIP model
     """
     model = CLIP(emb_dim, vit_width, img_size, patch_size, n_channels, vit_layers, vit_heads, vocab_size, text_width, max_seq_length, text_heads, text_layers, name)
     return model
 
+
+def predict(image, model, class_labels):
+    model.eval()  # Set model to eval mode
+
+    with torch.no_grad():
+        # Encode image
+        image_embedding = model.image_encoder(image)
+
+        # Encode text labels
+        text_embeddings = []
+        for label in class_labels:
+            tokenized_text, mask = tokenizer(label, encode=True, max_seq_length=32)
+            tokenized_text = tokenized_text.unsqueeze(0)  # Add batch dim
+            mask = mask.unsqueeze(0)
+
+            text_embedding = model.text_encoder(tokenized_text, mask)
+            text_embeddings.append(text_embedding)
+
+        text_embeddings = torch.cat(text_embeddings, dim=0)  # Shape: (num_labels, emb_dim)
+
+        # Compute similarity
+        similarity = (image_embedding @ text_embeddings.T).squeeze(0)  # (num_labels,)
+        best_match = torch.argmax(similarity).item()
+
+        return class_labels[best_match]
 
 
 if __name__ == "__main__":
@@ -287,7 +318,11 @@ if __name__ == "__main__":
     batch_size = 128
     name = "test"
 
-    model = CLIP(emb_dim, vit_width, img_size, patch_size, n_channels, vit_layers, vit_heads, vocab_size, text_width, max_seq_length, text_heads, text_layers, name)
-    for name, param in model.state_dict().items():
-        print(name, param)
+    # Example usage
+    image = torch.rand(1, 1, 28, 28)  # Simulated input image
+    class_labels = ["sheep", "lion"]
 
+    model = CLIP(emb_dim, vit_width, img_size, patch_size, n_channels, vit_layers, vit_heads, vocab_size, text_width, max_seq_length, text_heads, text_layers, name)
+    predicted_label = predict(image, model, class_labels)
+
+    print(f"Predicted Label: {predicted_label}")

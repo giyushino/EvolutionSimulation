@@ -16,7 +16,8 @@ def studyLayers(model, specificLayers=None, seeWeights=False):
     Returns: 
         None
     """
-    print(f"Studying {model.name}")     
+    total_params = sum(p.numel() for p in model.parameters())
+    print(f"Studying {model.name} || # Params: {total_params}")     
     
     for name, param in model.named_parameters():
         if specificLayers is None or name in specificLayers:
@@ -85,13 +86,13 @@ if __name__ == "__main__":
     test = Brain("test")
     base = Brain("base")
     comparison = Brain("comparison")
-    #studyLayers(test, None, False)
+    studyLayers(test, None, False)
     t0 = time.perf_counter()
     compareParams(test, test, None, seeWeights=False, shouldPrint=False)
     t1 = time.perf_counter()
     testViT = CLIPModel(name = "test")
     comparisonViT = CLIPModel(name = "compare")
-    #studyLayers(testViT, None, False)
+    studyLayers(testViT, None, False)
     t2 = time.perf_counter()
     compareParams(testViT, comparisonViT, None, seeWeights=False, shouldPrint=False)
     t3 = time.perf_counter()
