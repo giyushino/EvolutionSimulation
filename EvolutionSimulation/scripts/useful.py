@@ -57,21 +57,9 @@ def inference(tensors, model, animals):
         similarity = (predictions @ text_embeddings.T).squeeze(0)  
         best_match = torch.argmax(similarity, dim=-1).to(DEVICE)  
 
-    print(best_match)
     return best_match
 
 
-def accuracy(model, dataset, num_img, batch_size, start_index, animals):
-    total = 0 
-    correct = 0
-    for i in range(start_index, start_index + num_img, batch_size): 
-        tensors, truth = batch(batch_size, i, dataset, animals) 
-
-
-    return 0
-
-
-#accuracy(None, None, 1000, 100, 0)
 
 """
 if __name__ == "__main__":

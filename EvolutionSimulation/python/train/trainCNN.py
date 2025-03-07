@@ -10,15 +10,8 @@ import torch.nn.functional as F
 import torch.optim as optim
 import os
 
-animals = {
-    "lion": 1,
-    "crocodile": 1,
-    "dragon": 1,
-    "duck": 0,
-    "sheep": 0,
-}
 
-def batch(batch_size, start_index, dataset):
+def batch(batch_size, start_index, dataset, animals = {"lion": 1, "crocodile": 1, "dragon": 1, "duck": 0, "sheep": 0}):
     """
     Batch image into tensors
 
@@ -80,18 +73,18 @@ def train(num_img, batch_size, num_epoch, model, dataset):
             optimizer.step()
             epoch_loss += loss.item()
             if (i / num_img * 100) % 10 == 0:
-                print(f"{i / num_img * 100}% | Loss: {loss.item():.4f}")
+                print(f"{i / num_img * 100}% || Loss: {loss.item():.4f}")
         
         avg_loss = epoch_loss / (num_img // batch_size)
         total_loss += epoch_loss
         t1 = time.perf_counter()
         print(f"Finished Epoch {epoch} in {t1 - t0} seconds, Loss: {avg_loss:.4f}")
         try:
-            os.mkdir("/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/simple/gradient/{}".format(num_img))
+            os.mkdir("/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/CNN/simple/gradient/{}".format(num_img))
         except FileExistsError:
             pass
         if epoch >= num_epoch - 3:
-            torch.save(model.state_dict(), "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/simple/gradient/{}/epoch{}.pt".format(num_img, epoch))
+            torch.save(model.state_dict(), "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/CNN/simple/gradient/{}/epoch{}.pt".format(num_img, epoch))
 
 
 def trainSave(numImg, batchSize, epoch):
@@ -101,7 +94,7 @@ def trainSave(numImg, batchSize, epoch):
     train(numImg, batchSize, epoch, brain, shuffled_dataset)
 
 if __name__ == "__main__":
-    trainSave(5000, 1000, 10)
+    trainSave(100, 10, 10)
 
 
 
