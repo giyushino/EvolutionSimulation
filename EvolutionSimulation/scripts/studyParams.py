@@ -99,3 +99,5 @@ if __name__ == "__main__":
     print(f"{t1 - t0} for basic, {t3 - t2} for complex")
 
 
+    studyLayers(test, None, False)
+    studyLayers(testViT, None, False)

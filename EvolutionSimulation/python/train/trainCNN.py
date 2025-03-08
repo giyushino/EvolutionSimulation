@@ -101,6 +101,7 @@ def trainSave(numImg, batchSize, epoch):
     train(numImg, batchSize, epoch, brain, shuffled_dataset)
 
 if __name__ == "__main__":
-    trainSave(10000, 1000, 20)
+    trainSave(5000, 1000, 10)
+
 
 

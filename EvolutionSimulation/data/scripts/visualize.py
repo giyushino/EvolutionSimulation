@@ -8,7 +8,6 @@ from PIL import Image
 import numpy as np
 import random
 
-data = load_dataset("json", data_files = "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/datasets/simple.json")
 
 def view(dataset, dataset_type, image_index):
     """
@@ -23,7 +22,7 @@ def view(dataset, dataset_type, image_index):
     """
     # Create numpy array
     image = np.array(dataset[dataset_type][image_index]["image"], dtype=np.uint8)
-    name = data[dataset_type][image_index]["name"]
+    name = dataset[dataset_type][image_index]["name"]
     # Show image
     display = Image.fromarray(image)
     plt.imshow(display, cmap="gray")
@@ -33,4 +32,9 @@ def view(dataset, dataset_type, image_index):
 
     return image
 
-view(data, "train", random.randint(1, 200000))
+
+"""
+if __name__ == "__main__":
+    data = load_dataset("json", data_files = "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/datasets/complex.json")
+    view(data, "train", random.randint(1, 200000))
+"""
