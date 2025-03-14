@@ -72,14 +72,26 @@ def accuracy(dataset, model, weightPath, numImg, batchSize, startIndex, animals 
     return (correct/total)
 
 if __name__ == "__main__":
+
+    """
+    dataset = loadDataset("simple")
+    dataset = dataset.shuffle()
+    model = CLIPModel()
+
+    baseCLIPResults = accuracy(dataset, model, None, 1000, 100, 0 )
+    trainedCLIPResults = accuracy(dataset, model, "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/CLIP/test/test4.pt", 1000, 100, 0 )
+    print(baseCLIPResults)
+    print(trainedCLIPResults)
+    """
+    
     dataset = loadDataset("simple")
     dataset = dataset.shuffle()
     baseCNN = Brain()
     model = CLIPModel()
     baseCNNResults = accuracy(dataset, baseCNN, None, 1000, 100, 0 )
-    trainedCNNResults = accuracy(dataset, baseCNN, "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/simple/gradient/100000/epoch19.pt", 1000, 100, 0 )
+    trainedCNNResults = accuracy(dataset, baseCNN, "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/CNN/simple/gradient/100000/epoch19.pt", 1000, 100, 0 )
     baseCLIPResults = accuracy(dataset, model, None, 1000, 100, 0 )
     print(baseCNNResults)
     print(baseCLIPResults)
     print(trainedCNNResults)
-
+    

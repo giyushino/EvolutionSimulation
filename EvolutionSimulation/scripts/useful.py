@@ -60,7 +60,6 @@ def inference(tensors, model, animals):
     return best_match
 
 
-
 """
 if __name__ == "__main__":
     

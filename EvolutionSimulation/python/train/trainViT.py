@@ -31,7 +31,6 @@ def train(numImg, batchSize, numEpochs, model, dataset, animals = {"sheep": 0, "
                 captions.append(caption)
                 mask = mask.repeat(32, 1)
                 masks.append(mask)
-
             captions = torch.stack(captions).to(DEVICE)  
             masks = torch.stack(masks).to(DEVICE)  
             loss = model(tensor.to(DEVICE), captions, masks)
@@ -43,7 +42,7 @@ def train(numImg, batchSize, numEpochs, model, dataset, animals = {"sheep": 0, "
 
             if (i / numImg * 100) % 10 == 0:
                 print(f"{i / numImg * 100}% || Loss: {loss.item():.4f}")
-        
+                
         # Average the loss at the end of the epoch
         avg_loss = epochLoss / (numImg // batchSize)
         t1 = time.perf_counter()

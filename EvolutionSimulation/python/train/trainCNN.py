@@ -10,7 +10,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import os
 
-
+# For more complex, we can do {"sheep": 0, "lion": 1, "crocodile": 2, "dragon": 3, "duck": 4}
 def batch(batch_size, start_index, dataset, animals = {"lion": 1, "crocodile": 1, "dragon": 1, "duck": 0, "sheep": 0}):
     """
     Batch image into tensors
