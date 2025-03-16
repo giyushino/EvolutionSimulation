@@ -62,9 +62,8 @@ def accuracy(dataset, model, weightPath, numImg, batchSize, startIndex, animals 
     model.to(DEVICE) 
     for i in range(startIndex, startIndex + numImg, batchSize):
         tensor, truth = batch(batchSize, i, dataset, animals)
-
         output = inference(tensor, model, animals)
-        for i in range(100):
+        for i in range(batchSize):
             total += 1
             if output[i] == truth[i]:
                 correct += 1
@@ -73,17 +72,19 @@ def accuracy(dataset, model, weightPath, numImg, batchSize, startIndex, animals 
 
 if __name__ == "__main__":
 
-    """
     dataset = loadDataset("simple")
     dataset = dataset.shuffle()
     model = CLIPModel()
-
-    baseCLIPResults = accuracy(dataset, model, None, 1000, 100, 0 )
-    trainedCLIPResults = accuracy(dataset, model, "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/CLIP/test/test4.pt", 1000, 100, 0 )
+    test = Brain()
+    accuracyTimed = timed(accuracy)
+    baseCLIPResults = accuracyTimed(dataset, model, None, 100, 10, 0 )
+    test2 = accuracyTimed(dataset, test, None, 100, 10, 0 )
+    #trainedCLIPResults = accuracyTimed(dataset, model, "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/CLIP/test/test4.pt", 10, 10, 0 )
     print(baseCLIPResults)
-    print(trainedCLIPResults)
-    """
-    
+    print(test2)
+    #print(trainedCLIPResults)
+
+    """ 
     dataset = loadDataset("simple")
     dataset = dataset.shuffle()
     baseCNN = Brain()
@@ -94,4 +95,4 @@ if __name__ == "__main__":
     print(baseCNNResults)
     print(baseCLIPResults)
     print(trainedCNNResults)
-    
+    """

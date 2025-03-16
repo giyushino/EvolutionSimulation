@@ -7,7 +7,7 @@ import torchvision.transforms as T
 from EvolutionSimulation.python.neuralNetworks.ViT import CLIPModel, tokenizer
 import torch
 import torch.optim as optim
-from EvolutionSimulation.data.scripts.bruh import *
+from EvolutionSimulation.data.scripts.ViTDataset import *
 from EvolutionSimulation.scripts.useful import *
 
 
@@ -17,9 +17,10 @@ print("Using device: ", device, f"({torch.cuda.get_device_name(device)})" if tor
 
 model = CLIPModel().to(device)
 lr = 1e-3
-epochs = 10
-batch_size = 128
+epochs = 20
 print("Loading Data...")
+train_set, train_loader = loadDatasetViT(300000)
+print("finished loading data")
 
 optimizer = optim.Adam(model.parameters(), lr=lr)
 

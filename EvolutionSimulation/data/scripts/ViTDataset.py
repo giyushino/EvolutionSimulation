@@ -6,6 +6,7 @@ from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms as T
 from EvolutionSimulation.python.neuralNetworks.ViT import tokenizer
 
+
 # For more complex, we can do {"sheep": 0, "lion": 1, "crocodile": 2, "dragon": 3, "duck": 4}
 def createDataset(numImg, whichClass, binary):
     """
@@ -95,25 +96,29 @@ class MyCustomDataset(Dataset):
         self.transform = T.ToTensor()
 
         self.captions = {
-            1: "a drawing of a lion",
-            1: "a drawing of a crocodile",
-            1: "a drawing of a dragon",
-            0: "a drawing of a sheep",
-            0: "a drawing of a duck"
+            1: "lion",
+            0: "sheep",
         }
 
+        """
+        self.captions = {
+            1: "lion",
+            1: "crocodile",
+            1: "dragon",
+            0: "sheep",
+            0: "duck"
+        }
+        """
     def __len__(self):
         return len(self.dataset)
 
     def __getitem__(self, i):
         img = self.dataset[i]["image"]
         img = self.transform(img)
-
         cap, mask = tokenizer(self.captions[self.dataset[i]["label"]])
-
         mask = mask.repeat(len(mask), 1)
-
         return {"image": img, "caption": cap, "mask": mask}
+
 
 def loadDatasetViT(numImg, classes = ["sheep", "lion"], binary = True):
     dataset = createDataset(numImg, classes, binary) 
@@ -121,7 +126,10 @@ def loadDatasetViT(numImg, classes = ["sheep", "lion"], binary = True):
     train_loader = DataLoader(train_set, shuffle=True, batch_size=128)
     return train_set, train_loader
 
+
 if __name__ == "__main__":
     one, two = loadDatasetViT(100)
     print(one[9])
-    
+
+
+

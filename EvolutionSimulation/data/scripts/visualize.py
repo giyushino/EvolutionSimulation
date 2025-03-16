@@ -33,8 +33,6 @@ def view(dataset, dataset_type, image_index):
     return image
 
 
-"""
 if __name__ == "__main__":
-    data = load_dataset("json", data_files = "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/datasets/complex.json")
+    data = load_dataset("json", data_files = "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/datasets/simple.json")
     view(data, "train", random.randint(1, 200000))
-"""

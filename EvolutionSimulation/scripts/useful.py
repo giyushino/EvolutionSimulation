@@ -38,7 +38,7 @@ def inference(tensors, model, animals):
     tensors = tensors.to(DEVICE)  
     # CNN has 2818 || ViT has 65370
     total_params = sum(p.numel() for p in model.parameters())
-    
+        
     if total_params == 2818: 
         predictions = model(tensors) 
         best_match = torch.argmax(predictions, dim=-1)
@@ -56,28 +56,20 @@ def inference(tensors, model, animals):
         text_embeddings = torch.cat(text_embeddings, dim=0).to(DEVICE)  
         similarity = (predictions @ text_embeddings.T).squeeze(0)  
         best_match = torch.argmax(similarity, dim=-1).to(DEVICE)  
-
     return best_match
 
 
-"""
 if __name__ == "__main__":
     
     clip = CLIPModel(name = "clip")
     cnn = Brain("cnn") 
-    cnn.load_state_dict(torch.load(r"/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/simple/gradient/10000/epoch9.pt"))
+    cnn.load_state_dict(torch.load(r"/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/CNN/simple/gradient/100000/epoch9.pt"))
+    clip.load_state_dict(torch.load("/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/CLIP/test/test4.pt"))
     simple = loadDataset("simple")
     simpleShuffled = simple.shuffle()
     animals = {"sheep": 0, "lion": 1}
     tensor, truth = batch(20, 1000, simpleShuffled, animals)
     print(truth)
-    inference(tensor, clip, animals)
-    inference(tensor, cnn, animals)
-    timedDataset = timed(loadDataset)
-    simple = timedDataset("simple")
-
-    simple = simple.shuffle()
-    timedBatch = timed(batch)
-    tensor, truth = timedBatch(100, 0, simple, {"sheep": 0, "lion": 1})
-    print(truth)
-    """
+    test = inference(tensor, clip, animals)
+    test2 = inference(tensor, cnn, animals)
+    print(test, test2)
