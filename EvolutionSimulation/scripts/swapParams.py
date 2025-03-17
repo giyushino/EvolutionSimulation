@@ -26,7 +26,7 @@ def randomize(tensor, random: float = 0):
     randTensor = minVal + (maxVal - minVal) * torch.rand(tensor.shape)
     #print(f"rand tensor: {randTensor}")
 
-    return tensor * randTensor
+    return tensor.to(DEVICE) * randTensor.to(DEVICE)
 
 # Will be used for asexual reproduction? Essentially take the best performing model out of each generation and create n versions of it
 def modify(model, specificLayers, randomStrength: float):

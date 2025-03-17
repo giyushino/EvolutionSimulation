@@ -5,6 +5,7 @@ from EvolutionSimulation.python.neuralNetworks.ViT import *
 from EvolutionSimulation.python.test.accuracy import *
 from EvolutionSimulation.scripts.useful import *
 from EvolutionSimulation.scripts.swapParams import *
+from EvolutionSimulation.scripts.studyParams import *
 import random 
 
 def generation(model, numBrains):
@@ -59,11 +60,48 @@ def sheepPredation(generation, dataset, numImg, batchSize, threshold, shouldPrin
     print(f"\n{len(survivors)} sheep survived!")
     return survivors
 
+def procreate(asexual: bool, father, mother, shouldRandomize, randomStrength, layers = None):
+    """
+    Simulates procreation between 2 sheep 
+   
+   Args:
+        asexual (bool): Whether or not to use asexual reproduction
+        father (nn.Module): 🐑 🧠 Custom CNN
+        mother (nn.Module): 🐑 🧠 Custom CNN 
+        shouldSwap (bool): Whether or not we should swap the layers 
+        shouldMerge (bool): Whether or not we should merge the layers 
+        random (float): How much randomness should be added to the model 
+        layers (list): List of layers to swap layers 
+        
+    Returns: 
+        child (Brain): Modified CNN
+    """
 
-test = generation("ViT", 100)
+    if sum(p.numel() for p in father.parameters()) == 2818:
+        child = Brain()
+    else:
+        child = CLIPModel()
+    if asexual == True: 
+        child.load_state_dict(father.state_dict())
+        return modify(child, layers, randomStrength)
+    else: 
+        return merge(father, mother, child, layers, shouldRandomize, randomStrength) 
+
+def newGeneration():
+    
+    return 0
+
+
+
+test = generation("CNN", 100)
 loadDatasetTimed = timed(loadDataset)
 dataset = loadDatasetTimed("simple")
 dataset = dataset.shuffle()
 test = sheepPredation(test, dataset, 100, 10, 55, True)
-for sheep in test: 
-    print(sheep[1])
+print(len(test))
+child = procreate(False, test[0][0], test[1][0], True, 0.1)
+child.to(torch.device("cuda"))
+compareParams(child, test[0][0])
+compareParams(child, test[1][0])
+
+

@@ -27,8 +27,10 @@ To replicate experiments, go to [Google QuickDraw Dataset](https://console.cloud
 ## To Do
 - [x] Create class for animals 
 - [x] Decide what the task for NN to solve is. MNIST? Binary classification?
-- [x] Test smallest number of training images to achieve good accuracy ~ 90% (5k seems fine)
-- [x] GET THE EVOLUTION ACTUALLY WORKING
+- [ ] Test smallest number of training images to achieve good accuracy ~ 90% (5k seems fine)
+- [ ] Test everything with a normalize dataset 
+- [ ] Get the CLIP training working 
+- [ ] GET THE EVOLUTION ACTUALLY WORKING
 - [ ] Test on CPU (normal + evolve)
 - [ ] Speed up evolution (lower outsider sheep)
 - [ ] Test with more classes 

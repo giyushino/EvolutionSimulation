@@ -42,7 +42,10 @@ def compareParams(base, comparison, specificLayers=None, seeWeights=False, shoul
         difference (float): Summed difference between the layers
             higher: more similar, 0: identical, negative: different
 ,   """
+    device = torch.device("cuda")
     print(f"Comparing {base.name} with {comparison.name}")
+    base.to(device)
+    comparison.to(device)
     difference = 0
     cos = torch.nn.CosineSimilarity(dim=0, eps=1e-6)  # Use dim=0 for flat tensors
     count = 0 
