@@ -1,0 +1,11 @@
+def plot_progress(self):
+    """Plot the training progress"""
+    plt.figure(figsize=(10, 5))
+    plt.plot(self.best_fitness_history, label='Best Fitness')
+    plt.plot(self.avg_fitness_history, label='Average Fitness')
+    plt.xlabel('Generation')
+    plt.ylabel('Accuracy (%)')
+    plt.title('Evolutionary Training Progress')
+    plt.legend()
+    plt.grid(True)
+    plt.show()

@@ -2,12 +2,17 @@
 
 from EvolutionSimulation.python.neuralNetworks.CNN import *
 from EvolutionSimulation.python.neuralNetworks.ViT import *
+from EvolutionSimulation.scripts.device import DEVICE 
 from EvolutionSimulation.scripts.timer import *
 from datasets import load_dataset
 import torch
 
-def loadDataset(dataType):
+
+def loadDatasetOLD(dataType):
     return load_dataset("json", data_files = r"/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/datasets/{}.json".format(dataType))
+
+def loadDataset(dataType):
+    return load_dataset("json", data_files = r"/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/datasets/{}Normalized.json".format(dataType))
 
 def batch(batch_size, start_index, dataset, animals):
     """
@@ -33,7 +38,6 @@ def batch(batch_size, start_index, dataset, animals):
 
 # Write comments
 def inference(tensors, model, animals):
-    DEVICE = torch.device("cuda")
     model.to(DEVICE)
     tensors = tensors.to(DEVICE)  
     # CNN has 2818 || ViT has 65370
@@ -60,7 +64,7 @@ def inference(tensors, model, animals):
 
 
 if __name__ == "__main__":
-    
+    print(DEVICE) 
     clip = CLIPModel(name = "clip")
     cnn = Brain("cnn") 
     cnn.load_state_dict(torch.load(r"/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/CNN/simple/gradient/100000/epoch9.pt"))

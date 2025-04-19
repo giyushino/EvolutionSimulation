@@ -1,8 +1,12 @@
 #conda_env: evolutionSimulation
-from EvolutionSimulation.python.neuralNetworks.CNN import Brain 
+
 from EvolutionSimulation.python.neuralNetworks.ViT import CLIPModel 
+from EvolutionSimulation.python.neuralNetworks.CNN import Brain 
+from EvolutionSimulation.scripts.device import DEVICE 
 import torch.nn
 import time
+
+
 
 def studyLayers(model, specificLayers=None, seeWeights=False):
     """ 
@@ -42,10 +46,9 @@ def compareParams(base, comparison, specificLayers=None, seeWeights=False, shoul
         difference (float): Summed difference between the layers
             higher: more similar, 0: identical, negative: different
 ,   """
-    device = torch.device("cuda")
     print(f"Comparing {base.name} with {comparison.name}")
-    base.to(device)
-    comparison.to(device)
+    base.to(DEVICE)
+    comparison.to(DEVICE)
     difference = 0
     cos = torch.nn.CosineSimilarity(dim=0, eps=1e-6)  # Use dim=0 for flat tensors
     count = 0 

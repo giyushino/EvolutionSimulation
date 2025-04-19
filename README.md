@@ -31,6 +31,7 @@ To replicate experiments, go to [Google QuickDraw Dataset](https://console.cloud
 - [ ] Test everything with a normalize dataset 
 - [ ] Get the CLIP training working 
 - [ ] GET THE EVOLUTION ACTUALLY WORKING
+- [ ] add matplotlib
 - [ ] Test on CPU (normal + evolve)
 - [ ] Speed up evolution (lower outsider sheep)
 - [ ] Test with more classes 

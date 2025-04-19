@@ -10,7 +10,6 @@ import os
 
 
 def train(numImg, batchSize, numEpochs, model, dataset, animals = {"sheep": 0, "lion": 1}, lr = 1e-3):
-    DEVICE = torch.device("cuda")
     optimizer = optim.Adam(model.parameters(), lr=lr)
     model.to(DEVICE)
     bestLoss = np.inf

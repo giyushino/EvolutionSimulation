@@ -1,13 +1,11 @@
 #conda_env: evolutionSimulation
 from EvolutionSimulation.python.neuralNetworks.CNN import Brain 
 from EvolutionSimulation.python.neuralNetworks.ViT import CLIPModel
+from EvolutionSimulation.scripts.device import DEVICE 
 from EvolutionSimulation.scripts.studyParams import *
 import torch.nn 
 import torch
 
-
-
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def randomize(tensor, random: float = 0):
     """

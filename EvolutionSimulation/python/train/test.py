@@ -9,13 +9,11 @@ import torch
 import torch.optim as optim
 from EvolutionSimulation.data.scripts.ViTDataset import *
 from EvolutionSimulation.scripts.useful import *
+from EvolutionSimulation.scripts.device import *
 
 
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print("Using device: ", device, f"({torch.cuda.get_device_name(device)})" if torch.cuda.is_available() else "")
-
-model = CLIPModel().to(device)
+print(f"Using device: {DEVICE}") 
+model = CLIPModel().to(DEVICE)
 lr = 1e-3
 epochs = 5 
 
@@ -52,7 +50,7 @@ print("start training")
 best_loss = np.inf
 for epoch in range(epochs):
     for i, data in enumerate(train_loader, 0):
-        img, cap, mask = data["image"].to(device), data["caption"].to(device), data["mask"].to(device)
+        img, cap, mask = data["image"].to(DEVICE), data["caption"].to(DEVICE), data["mask"].to(DEVICE)
         loss = model(img,cap,mask)
         print(loss)
         optimizer.zero_grad()

@@ -9,6 +9,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import os
+from EvolutionSimulation.scripts.device import *
 
 # For more complex, we can do {"sheep": 0, "lion": 1, "crocodile": 2, "dragon": 3, "duck": 4}
 def batch(batch_size, start_index, dataset, animals = {"lion": 1, "crocodile": 1, "dragon": 1, "duck": 0, "sheep": 0}):
@@ -48,10 +49,9 @@ def train(num_img, batch_size, num_epoch, model, dataset):
     Returns:
         None
     """
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Training using {device}")
+    print(f"Training using {DEVICE}")
     optimizer = optim.Adam(model.parameters(), lr=1e-5)
-    model.to(device)
+    model.to(DEVICE)
     model.train()
     best_loss = float("inf")
     total_loss = 0
@@ -62,8 +62,8 @@ def train(num_img, batch_size, num_epoch, model, dataset):
 
         for i in range(0, num_img, batch_size):
             temp_batch = batch(batch_size, i, dataset)
-            predictions = model(temp_batch[0].to(device))
-            ground_truth = torch.tensor(temp_batch[1]).to(device, dtype = torch.long)
+            predictions = model(temp_batch[0].to(DEVICE))
+            ground_truth = torch.tensor(temp_batch[1]).to(DEVICE, dtype = torch.long)
             loss_fn = nn.CrossEntropyLoss()
 
             loss = loss_fn(predictions, ground_truth)
@@ -84,17 +84,17 @@ def train(num_img, batch_size, num_epoch, model, dataset):
         except FileExistsError:
             pass
         if epoch >= num_epoch - 3:
-            torch.save(model.state_dict(), "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/CNN/simple/gradient/{}/epoch{}.pt".format(num_img, epoch))
+            torch.save(model.state_dict(), "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/weights/test.pt".format(num_img, epoch))
 
 
 def trainSave(numImg, batchSize, epoch):
     brain = Brain()
-    data = load_dataset("json", data_files = "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/datasets/simple.json")
+    data = load_dataset("json", data_files = "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/datasets/simpleNormalized.json")
     shuffled_dataset = data.shuffle()
     train(numImg, batchSize, epoch, brain, shuffled_dataset)
 
 if __name__ == "__main__":
-    trainSave(100, 10, 10)
+    trainSave(5000, 100, 5)
 
 
 

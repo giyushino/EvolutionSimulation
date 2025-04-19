@@ -33,8 +33,9 @@ def createDataset(dataPath, savePath, names, returnDataset):
     for animal in temp:
         bruh = []
         for i in range(len(animal)):
-            bruh.append(animal[i].reshape(28,28))
+            bruh.append(animal[i].reshape(28,28) / 255)
         reshaped.append(bruh)
+
    
     count = 0
     # Write to json file    
@@ -53,7 +54,7 @@ def createDataset(dataPath, savePath, names, returnDataset):
     
         
 # complex dataset
-
+""""
 print("creating complex dataset")
 createDataset(
     dataPath = "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/rawData/",
@@ -61,12 +62,13 @@ createDataset(
     savePath = "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/datasets/complex.json", 
     returnDataset = False
 )
+"""
 
 print("creating simple dataset")
 # simple dataset
 createDataset(
     dataPath = "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/rawData/",
     names = ["lion", "sheep"],
-    savePath = "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/datasets/simple.json", 
+    savePath = "/home/allan/nvim/projects/EvolutionSimulation/EvolutionSimulation/data/datasets/simpleNormalized.json", 
     returnDataset = False
 )

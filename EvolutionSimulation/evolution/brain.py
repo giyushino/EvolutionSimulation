@@ -76,7 +76,7 @@ def procreate(asexual: bool, father, mother, shouldRandomize, randomStrength, la
     Returns: 
         child (Brain): Modified CNN
     """
-
+    
     if sum(p.numel() for p in father.parameters()) == 2818:
         child = Brain()
     else:
@@ -87,21 +87,38 @@ def procreate(asexual: bool, father, mother, shouldRandomize, randomStrength, la
     else: 
         return merge(father, mother, child, layers, shouldRandomize, randomStrength) 
 
-def newGeneration():
-    
+def newGeneration(model, old_brains, gen_size):
+    """
+    Creates a new generation 
+    Args:
+        model (string): what kind of nn to use
+        old (list): survivors 
+        gen_size (num): number of sheep we want in the generation
+    """
+    new_gen = old_brains
+    if model == "CNN":
+        for i in range(gen_size - len(old_brains)):
+            brain = Brain()
+            new_gen.append([brain, 0])
+    else:
+        for i in range(gen_size - len(old_brains)):
+            brain = CLIPModel()
+            new_gen.append([brain, 0])
+
+    return new_gen
     return 0
 
-
-
-test = generation("CNN", 100)
-loadDatasetTimed = timed(loadDataset)
-dataset = loadDatasetTimed("simple")
-dataset = dataset.shuffle()
-test = sheepPredation(test, dataset, 100, 10, 55, True)
-print(len(test))
-child = procreate(False, test[0][0], test[1][0], True, 0.1)
-child.to(torch.device("cuda"))
-compareParams(child, test[0][0])
-compareParams(child, test[1][0])
+if __name__ == "__main__":
+    """
+    test = generation("CNN", 100)
+    loadDatasetTimed = timed(loadDataset)
+    dataset = loadDatasetTimed("simple")
+    print(len(dataset))
+    dataset = dataset.shuffle()
+    test = sheepPredation(test, dataset, 100, 10, 55, True)
+    print(len(test))
+    child = procreate(False, test[0][0], test[1][0], True, 0.1)
+    child.to(torch.device("cuda"))
+    """
 
 
