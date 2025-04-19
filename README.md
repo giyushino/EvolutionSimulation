@@ -1,5 +1,5 @@
 # EvolutionSimulation
-Testing out if I can replicate evolutionary adaptations seen in nature, as well as the natural improvements of neural networks. Currently testing if a binary classification CNN trained to differentiate between lions and sheep can achieve relatively high accuracy simply through a rudimentary implementation of evolution.
+Testing out if I can replicate evolutionary adaptations seen in nature, as well as the natural improvements of neural networks. Currently testing if a binary classification CNN trained to differentiate between lions and sheep can achieve relatively high accuracy simply through a rudimentary implementation of natural selection.
 
 ## Current Features 
 Almost implemented the evolution, having difficulties with the CLIP Model normal training method
